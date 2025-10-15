@@ -1,0 +1,64 @@
+//CONSIDERATIONS AND ASSUMPTIONS
+//  in a text file as required
+//
+//1. preprocessing for null
+//
+//preprocessing to drop rows with null values in Dataset 1's detection_oid
+//preprocessing to check Dataset 1's geographical_location_oid but video_camera_oid is not null
+//      and compare with other rows's geographical_location_oid with same video_camera_oid
+//if video_camera_oid is null, no change, as aggregating by geographical_location_oid
+
+//preprocessing to drop rows with null values in Dataset 2's geographical_location_oid
+//preprocessing to ensure Dataset 2's geographical_location_oid has no duplicates (confirm unique)
+//preprocessing to check Dataset 2's geographical_location is null, but geographical_location_oid is not null,
+//      and update geographical_location as string of value s"get location unique ID is ${geo_location_oid}"
+//
+//
+//
+//2. Data cleaning steps done for Item_name, i.e. the string that the Detection Algo stores the item.
+// Using an example to explain, the Detection Algo stores as "Luggage, Green, 350mm" has semantics
+// which stores features that the item is a luggage green in colour of size 350mm
+// The data cleaning will place this attribute as "LUGGAGE"
+// This follows and compiles with the WOG-MS, which is the
+// WOG Video Analytics Metadata Standard's detected object-type, i.e. items type
+// the list is based on current detection technology are defined in the following enum (trait class)
+// [Future Use]for Further development, expansion of list
+// sealed trait ObjectType
+// case object LUGGAGE extends ObjectType
+// case object BACKPACK extends ObjectType
+// case object TRASHBIN extends ObjectType
+// case object TROLLEY extends ObjectType
+// case object BICYCLE extends ObjectType
+//
+//
+//
+//3. Detection_oid is unique, even if different timestamp, for the camera
+// The detection algo is able to track the object detected by the same camera within certain time window
+// that is configured in the detection algo.
+// The detection algo is also able to assign same Detection_oid across different cameras
+// (cross-camera tracking)
+//
+//
+//
+//4. for output, tie-breaker (i.e. same count) will be shown for the top Nth rank
+// hence, will get more than the Nth row, for such cases
+// [future] dashboard's consideration when displaying this
+//
+//
+//5. In addition, for count reduceByKey is used to reduce shuffle, as it do local aggregation, i.e. partial aggregation on each partition
+//  before shuffling the data
+// (not groupByKey - which collect all values without aggregation, then shuffle the data, potential memory issues for very large dataset)
+//
+//
+//
+//6. if using Intellj IDE, the scala style inspections
+// in IntelljIDEA menu, settings -> Inspections -> Scala -> Code Style -> Scala Style Inspections
+// scalastyle_config.xml in .idea folder
+//
+//
+//
+//
+//7. Run the main method in MainTest object if there is no input data, i.e.
+//  it will call SimulateFiles class to simulates the data for file1 - the detection events dataset
+//    and file2 - reference dataset for geographical_location_oid
+//

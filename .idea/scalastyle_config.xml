@@ -1,0 +1,16 @@
+<scalastyle commentFilter="enabled">
+    <name>Scalastyle standard configuration</name>
+    <check level="warning" class="org.scalastyle.file.FileTabChecker" enabled="true"/>
+    <check level="warning" class="org.scalastyle.file.FileLengthChecker" enabled="true">
+        <parameters>
+            <parameter name="maxFileLength">800</parameter>
+        </parameters>
+    </check>
+    <check level="warning" class="org.scalastyle.scalariform.PublicMethodsHaveTypeChecker" enabled="false"/>
+    <check level="error" class="org.scalastyle.scalariform.IfBraceChecker" enabled="true"/>
+    <check level="error" class="org.scalastyle.scalariform.CyclomaticComplexityChecker" enabled="true">
+        <parameters>
+            <parameter name="maxComplexity">10</parameter>
+        </parameters>
+    </check>
+</scalastyle>
